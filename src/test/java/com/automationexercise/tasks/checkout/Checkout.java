@@ -32,8 +32,7 @@ public class Checkout {
                 Enter.theValue(cardNumber).into(PaymentPageUI.CARD_NUMBER),
                 Enter.theValue(cvc).into(PaymentPageUI.CVC),
                 Enter.theValue(month).into(PaymentPageUI.EXPIRATION_MONTH),
-                Enter.theValue(year).into(PaymentPageUI.EXPIRATION_YEAR),
-                Click.on(PaymentPageUI.PAY_BUTTON)
+                Enter.theValue(year).into(PaymentPageUI.EXPIRATION_YEAR)
         );
     }
 }

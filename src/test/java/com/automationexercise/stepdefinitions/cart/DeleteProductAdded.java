@@ -24,15 +24,21 @@ public class DeleteProductAdded {
 
     @And("elimina uno de los productos del carrito")
     public void delete_product_added() {
+        int before = theActorInTheSpotlight().asksFor(CartPage.productRowsCount());
+        theActorInTheSpotlight().remember("count_before_delete", before);
+
         theActorInTheSpotlight().attemptsTo(
-                ProductCart.deleteFirstItem()
+                ProductCart.deleteFirstItem(),
+                ProductCart.waitDeleteItemAction()
         );
     }
 
     @Then("se elimina la fila seleccionada")
-        public void validateDeletion() {
+    public void validateDeletion() {
+        Integer before = theActorInTheSpotlight().recall("count_before_delete");
+
         theActorInTheSpotlight().should(
-                seeThat("Solo queda una fila depues de eliminar", CartPage.hasOnlyOneRow(), equalTo(true))
+                seeThat("La cantidad de filas disminuye en 1",CartPage.productRowsCount(),equalTo(before - 1))
         );
 
         theActorInTheSpotlight().attemptsTo(

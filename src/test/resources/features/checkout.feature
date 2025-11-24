@@ -7,7 +7,7 @@ Feature: Checkout de la compra
 
   @DireccionCompra
   Scenario: Se realiza el proceso de checkout del producto agregado
-    Given que el usuario a iniciado sesión exitosamente en automationexercise.com
+    Given que el usuario ha iniciado sesión exitosamente en automationexercise.com
     When hace click en el boton Add to cart de un producto
     And hace click en el botón View Cart en el mensaje de confirmacion
     And hace click en el botón Prooceed to checkout
@@ -15,7 +15,7 @@ Feature: Checkout de la compra
 
   @PlaceOrder
   Scenario: Se realiza el proceso de compra exitoso
-    Given que el usuario a iniciado sesión exitosamente en automationexercise.com
+    Given que el usuario ha iniciado sesión exitosamente en automationexercise.com
     When hace click en el boton Add to cart de un producto
     And hace click en el botón View Cart en el mensaje de confirmacion
     And hace click en el botón Prooceed to checkout

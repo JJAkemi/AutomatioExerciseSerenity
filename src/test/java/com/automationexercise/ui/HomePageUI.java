@@ -21,7 +21,7 @@ public class HomePageUI {
             .located(By.xpath("(//a[contains(text(),'Add to cart')])[1]"));
 
     public static final Target ADD_TO_CART_PRODUCT_MEN_TSHIRT = Target.the("Producto Men Tshirt del inventario")
-            .located(By.xpath("a[data-product-id='2']"));
+            .located(By.xpath("(//a[contains(text(),'Add to cart')])[3]"));
 
     public static final Target CONTINUE_SHOPPING_BUTTON = Target.the("Botón Continue Shopping")
             .located(By.xpath("//button[contains(text(),'Continue Shopping')]"));

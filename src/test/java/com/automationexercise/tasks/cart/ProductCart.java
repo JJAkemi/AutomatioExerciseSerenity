@@ -1,5 +1,6 @@
 package com.automationexercise.tasks.cart;
 
+import com.automationexercise.questions.CartPage;
 import com.automationexercise.tasks.homepage.HomePage;
 import com.automationexercise.ui.CartPageUI;
 import com.automationexercise.ui.HomePageUI;
@@ -9,7 +10,9 @@ import net.serenitybdd.screenplay.Task;
 import net.serenitybdd.screenplay.actions.Click;
 import net.serenitybdd.screenplay.actions.Scroll;
 import net.serenitybdd.screenplay.waits.WaitUntil;
+import org.awaitility.Awaitility;
 
+import java.time.Duration;
 import java.util.List;
 
 import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
@@ -73,7 +76,7 @@ public class ProductCart {
                     );
 
                     // Obtener cuántos items hay
-                    List<WebElementFacade> items =CartPageUI.DELETE_BUTTONS.resolveAllFor(actor);
+                    List<WebElementFacade> items = CartPageUI.DELETE_BUTTONS.resolveAllFor(actor);
 
                     // Si la lista no está vacía, eliminar uno por uno
                     while (!items.isEmpty()) {
@@ -81,6 +84,40 @@ public class ProductCart {
                         actor.attemptsTo(WaitUntil.angularRequestsHaveFinished());
                         items = CartPageUI.DELETE_BUTTONS.resolveAllFor(actor);
                     }
+                }
+        );
+    }
+
+    public static Performable viewAndRememberDetails() {
+        return Task.where("{0} recuerda los valores mostrados en el carrito de compras para el producto Blue Top",
+                actor -> {
+
+                    String name = actor.asksFor(CartPage.productName());
+                    String price = actor.asksFor(CartPage.productPrice());
+                    String quantity = actor.asksFor(CartPage.productQuantity());
+
+                    actor.remember("cart_name", name);
+                    actor.remember("cart_price", price);
+                    actor.remember("cart_quantity", quantity);
+                }
+        );
+    }
+
+
+    public static Performable waitDeleteItemAction() {
+        return Task.where("{0} espera que la tabla actualice la eliminación de un producto",
+                actor -> {
+
+                    Integer before = actor.recall("count_before_delete");
+
+                    Awaitility.await()
+                            .pollInterval(Duration.ofMillis(300))
+                            .atMost(Duration.ofSeconds(10))
+                            .until(() -> {
+
+                                int current = CartPageUI.PRODUCT_ROWS.resolveAllFor(actor).size();
+                                return current == before - 1;
+                            });
                 }
         );
     }

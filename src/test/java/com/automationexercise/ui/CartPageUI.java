@@ -25,6 +25,9 @@ public class CartPageUI {
     public static Target ROWS_TABLE_PRODUCTS_ADDED = Target.the("Todas las filas en la tabla de productos agregados")
             .located(By.cssSelector("tr"));
 
+    public static final Target PRODUCT_ROWS = Target.the("filas de productos")
+            .locatedBy("table.table.table-condensed tbody tr");
+
     public static final Target PROCEED_TO_CHECKOUT_BUTTON = Target.the("botón de Proceed to checkout para finalizar la compra")
             .locatedBy("//a[contains(text(),'Proceed To Checkout')]");
 
