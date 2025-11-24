@@ -16,7 +16,7 @@ import static net.serenitybdd.screenplay.actors.OnStage.theActorInTheSpotlight;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 public class ModalConfirmation {
-    @Given("que el usuario a iniciado sesión exitosamente en automationexercise.com")
+    @Given("que el usuario ha iniciado sesión exitosamente en automationexercise.com")
     public void login_ok() {
         theActorCalled("User").attemptsTo(
                 OpenPage.AutomationExercise(),

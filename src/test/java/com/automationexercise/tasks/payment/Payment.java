@@ -12,8 +12,8 @@ import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisi
 public class Payment {
     public static Performable clickPlaceOrder() {
         return Task.where("{0} click en el botón Pay and Confirm Order",
-                WaitUntil.the(PaymentPageUI.PAY_BUTTON, isVisible()).forNoMoreThan(20).seconds(),
-                Scroll.to(PaymentPageUI.PAY_BUTTON),
-                Click.on(PaymentPageUI.PAY_BUTTON));
+                WaitUntil.the(PaymentPageUI.PAY_AND_CONFIRM_ORDER_BUTTON, isVisible()).forNoMoreThan(20).seconds(),
+                Scroll.to(PaymentPageUI.PAY_AND_CONFIRM_ORDER_BUTTON),
+                Click.on(PaymentPageUI.PAY_AND_CONFIRM_ORDER_BUTTON));
     }
 }

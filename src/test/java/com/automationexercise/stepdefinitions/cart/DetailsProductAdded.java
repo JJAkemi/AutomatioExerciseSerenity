@@ -2,7 +2,6 @@ package com.automationexercise.stepdefinitions.cart;
 
 import com.automationexercise.questions.CartPage;
 import com.automationexercise.tasks.cart.ProductCart;
-import com.automationexercise.tasks.homepage.HomePage;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;

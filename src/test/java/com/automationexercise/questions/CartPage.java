@@ -20,7 +20,7 @@ public class CartPage {
         return actor -> CartPageUI.CART_IS_EMPTY_MESSAGE.resolveFor(actor).getText().trim();
     }
 
-    public static Question<Boolean> hasOnlyOneRow() {
-        return actor -> CartPageUI.ROWS_TABLE_PRODUCTS_ADDED.resolveAllFor(actor).size() == 1;
+    public static Question<Integer> productRowsCount() {
+        return actor -> CartPageUI.PRODUCT_ROWS.resolveAllFor(actor).size();
     }
 }
