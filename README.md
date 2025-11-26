@@ -22,7 +22,7 @@ Este proyecto contiene pruebas automatizadas utilizando Cucumber, Selenium y Ser
 5. Abre el archivo `target/site/serenity/index.html` en tu navegador para ver el informe de Serenity.
 
 ## La ejecución puede realizarse con Git Bash ingresando los distintos comandos
-## La ejecución tambien puede realizarse hyaciendo click en el icono verde de Play a la izquierda de cada comando en este archivo README
+## La ejecución tambien puede realizarse haciendo click en el icono verde de Play a la izquierda de cada comando en este archivo README
 
 
 ## Ejecutar todos los feature del proyecto con chrome
