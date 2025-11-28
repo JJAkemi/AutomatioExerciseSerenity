@@ -1,100 +1,45 @@
-name: Serenity BDD CI
-
-#on:
-#  push:
-#    branches:
-#      - qa
-#  pull_request:
-#    branches:
-#      - qa
+name: Serenity BDD QA Pipeline
 
 on:
-  workflow_dispatch:
-
-permissions:
-  contents: write
+  pull_request:
+    branches:
+      - qa       # Ejecutar pruebas cuando abren o actualizan PR hacia QA
+  push:
+    branches:
+      - qa       # (Esto es pcional) volver a ejecutar cuando el PR entra a QA
 
 jobs:
-  build-and-test:
+  test:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
 
     steps:
-      # 🔹 1. Checkout del repositorio
-      - name: Checkout del repositorio
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 🔹 2. Configurar JDK 21
-      - name: Configurar JDK 21
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
-          java-version: 21
-          cache: maven
+          java-version: '17'
+          distribution: 'temurin'
 
-      # 🔹 3. Instalar dependencias gráficas necesarias
-      - name: Instalar dependencias gráficas
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y jq wget unzip xvfb \
-            libnss3 libxss1 libasound2t64 fonts-liberation libatk-bridge2.0-0 libgtk-3-0
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
 
-      # 🔹 4. Instalar Chrome for Testing y ChromeDriver compatible
-      - name: Instalar Chrome for Testing con ChromeDriver
-        run: |
-          mkdir -p /opt/chrome
-          curl -s https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json \
-            | jq -r '.channels.Stable.downloads.chrome[] | select(.platform=="linux64") | .url' \
-            | xargs wget -O chrome-linux.zip
-          unzip chrome-linux.zip -d /opt/chrome
-          sudo rm -f /usr/bin/google-chrome
-          sudo ln -s /opt/chrome/chrome-linux64/chrome /usr/bin/google-chrome
+      - name: Run Serenity Tests
+        run: mvn clean verify -DskipTests=false
+        timeout-minutes: 10
 
-          curl -s https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json \
-            | jq -r '.channels.Stable.downloads.chromedriver[] | select(.platform=="linux64") | .url' \
-            | xargs wget -O chromedriver-linux.zip
-          unzip chromedriver-linux.zip
-          chmod +x chromedriver-linux64/chromedriver
-          sudo mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
-
-      # 🔹 5. Diagnóstico: verificar rutas y versiones
-      - name: Verificar instalación de Chrome y ChromeDriver
-        run: |
-          which google-chrome
-          google-chrome --version
-          which chromedriver
-          chromedriver --version
-
-      # 🔹 6. Ejecutar pruebas Serenity con Xvfb y flags adicionales
-      - name: Ejecutar pruebas Serenity
-        run: |
-          xvfb-run --auto-servernum --server-args='-screen 0 1024x768x24' \
-          mvn clean verify -Dwebdriver.driver=chrome \
-            -Dchrome.switches="--headless,--no-sandbox,--disable-dev-shm-usage,--disable-gpu,--remote-debugging-port=9222" \
-            -Dserenity.outputDirectory=target/site/serenity \
-            -e -X
-
-      # 🔹 7. Regenerar reporte Serenity
-      - name: Regenerar reporte Serenity
-        if: success() || failure()
+      - name: Generate Serenity Report
+        if: always()
         run: mvn serenity:aggregate
 
-      # 🔹 8. Verificar contenido del reporte
-      - name: Verificar contenido del reporte
-        run: ls -l target/site/serenity
-
-      # 🔹 9. Guardar reporte como artefacto
-      - name: Guardar reporte Serenity como artefacto
+      - name: Upload Serenity Report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: reporte-serenity
-          path: target/site/serenity
-
-      # 🔹 10. Publicar en GitHub Pages
-      - name: Publicar reporte en GitHub Pages
-        if: success() || failure()
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: target/site/serenity
+          name: serenity-report
+          path: target/site/serenity/
