@@ -27,7 +27,13 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
+      - name: Instalar Google Chrome (Binario Requerido)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
       - name: Run Serenity Tests (Headless)
+        # WebDriverManager aún descargará el ChromeDriver compatible
         run: mvn clean verify -DskipTests=false
         timeout-minutes: 8
 
