@@ -3,7 +3,7 @@ name: Serenity BDD QA Pipeline
 on:
   pull_request:
     branches:
-      - qa   # Ejecuta pruebas cuando abren o actualizan PR hacia QA
+      - qa
 
 jobs:
   test:
@@ -18,6 +18,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: 'maven'
 
       - name: Cache Maven packages
         uses: actions/cache@v4
@@ -26,30 +27,16 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Instalar Google Chrome
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y google-chrome-stable
-
-      - name: Instalar dependencias mínimas de Chrome
-        run: |
-          sudo apt-get install -y \
-            libnss3 \
-            libxss1 \
-            libgbm1 \
-            libatk1.0-0 \
-            libatk-bridge2.0-0
-
       - name: Run Serenity Tests (Headless)
         run: mvn clean verify -DskipTests=false
         timeout-minutes: 8
 
       - name: Generate Serenity Report
-        run: mvn serenity:aggregate
+        run: mvn clean site serenity:aggregate
 
-      - name: Upload Serenity Report
+      - name: Upload Serenity Report Artifact
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: serenity-report
+          name: serenity-report-${{ github.sha }}
           path: target/site/serenity/
