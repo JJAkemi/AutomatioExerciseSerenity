@@ -4,9 +4,6 @@ on:
   pull_request:
     branches:
       - qa       # Ejecutar pruebas cuando abren o actualizan PR hacia QA
-  push:
-    branches:
-      - qa       # (Esto es pcional) volver a ejecutar cuando el PR entra a QA
 
 jobs:
   test:
@@ -29,17 +26,20 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
+      # 👉 INSTALAR GOOGLE CHROME
+      - name: Instalar Google Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+        timeout-minutes: 2
+
+      # 👉 INSTALAR DEPENDENCIAS NECESARIAS PARA CHROME
+      - name: Instalar dependencias de Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb libxi6 libgconf-2-4 libxrender1 libxtst6 libnss3 libcups2 libxss1
+        timeout-minutes: 2
+
+      # 1. Ejecuta las pruebas Serenity (en modo HEADLESS)
       - name: Run Serenity Tests
-        run: mvn clean verify -DskipTests=false
-        timeout-minutes: 10
-
-      - name: Generate Serenity Report
-        if: always()
-        run: mvn serenity:aggregate
-
-      - name: Upload Serenity Report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: serenity-report
-          path: target/site/serenity/
+        run: mvn clean verify -DskipTests=false -Dwebdriver.driver=ch
