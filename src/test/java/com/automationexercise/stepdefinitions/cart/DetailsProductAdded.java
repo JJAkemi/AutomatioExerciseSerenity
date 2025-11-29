@@ -22,8 +22,8 @@ public class DetailsProductAdded {
 
     @Then("se muestra Nombre del producto, Precio y Cantidad")
     public void detail_product(DataTable data) {
-
-        List<String> valores = data.asList();
+        List<List<String>> rows = data.asLists(String.class);
+        List<String> valores = rows.get(0); // primera fila
 
         String expectedName = valores.get(0);
         String expectedPrice = valores.get(1);
