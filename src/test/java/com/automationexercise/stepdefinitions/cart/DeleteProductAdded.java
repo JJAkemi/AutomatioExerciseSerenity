@@ -40,10 +40,5 @@ public class DeleteProductAdded {
         theActorInTheSpotlight().should(
                 seeThat("La cantidad de filas disminuye en 1",CartPage.productRowsCount(),equalTo(before - 1))
         );
-
-        theActorInTheSpotlight().attemptsTo(
-                HomePage.clickContinueShoppingIfVisible(),
-                ProductCart.clearCart()
-        );
     }
 }

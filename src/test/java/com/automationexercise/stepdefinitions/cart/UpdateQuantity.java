@@ -58,10 +58,7 @@ public class UpdateQuantity {
 
     @Then("debería visualizar que la cantidad aumentó en una unidad")
     public void product_increased_quantity() {
-        int quantityRemembered = Integer.parseInt(
-                theActorInTheSpotlight().recall("cart_quantity")
-        );
-
+        int quantityRemembered = Integer.parseInt(theActorInTheSpotlight().recall("cart_quantity"));
         String expected = String.valueOf(quantityRemembered + 1);
 
         theActorInTheSpotlight().should(

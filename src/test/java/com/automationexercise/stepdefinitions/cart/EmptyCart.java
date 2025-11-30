@@ -32,10 +32,5 @@ public class EmptyCart {
                 seeThat("Se muestra el mensaje de confirmación de carrito sin productos.", CartPage.isEmptyCartMessageVisible(), equalTo(expected)
                 )
         );
-
-        theActorInTheSpotlight().attemptsTo(
-                HomePage.clickContinueShoppingIfVisible(),
-                ProductCart.clearCart()
-        );
     }
 }
