@@ -121,6 +121,12 @@ public class ProductCart {
                 }
         );
     }
+
+    public static Performable checkItemsAndClear(){
+        return Task.where("{0} si hay items en el carrito los elimina antes de salir de la prueba",
+                HomePage.clickContinueShoppingIfVisible(),
+                clearCart());
+    }
 }
 
 

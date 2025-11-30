@@ -40,10 +40,5 @@ public class ModalConfirmation {
                 seeThat("Se muestra el mensaje de confirmación: Your product has been added to cart.", com.automationexercise.questions.HomePage.isConfirmatioMessageVisible(), equalTo(expected)
                 )
         );
-
-        theActorInTheSpotlight().attemptsTo(
-                HomePage.clickContinueShoppingIfVisible(),
-                ProductCart.clearCart()
-        );
     }
 }
