@@ -7,6 +7,7 @@ import io.cucumber.java.en.Then;
 
 import java.util.List;
 
+import static com.automationexercise.utils.DataProvider.getValue;
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.actors.OnStage.theActorInTheSpotlight;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -14,8 +15,8 @@ import static org.hamcrest.CoreMatchers.equalTo;
 public class WrongPassword {
     @And("trata de iniciar sesión ingresando un password incorrecto")
     public void wrongPassword() {
-        String email = "test@flare.com";
-        String wrong_password = "wrong_password";
+        String email = getValue("usuarios", "EMAIL", 2);
+        String wrong_password = getValue("usuarios", "CLAVE", 2);
 
         theActorInTheSpotlight().attemptsTo(
                 NavegateToHomePage.withAnyCredentials(email, wrong_password)

@@ -48,7 +48,7 @@ mvn serenity:check-gherki
 
 ### Ejecución solo con Tag"@" - Es el tag que se encuentra en los archivos .features sobre cada escenario
 ``````
-mvn clean verify -Denvironment=chrome -Dcucumber.filter.tags=@ModalConfirmacion
+mvn clean verify -Denvironment=chrome -Dcucumber.filter.tags=@FuncionalidadAutenticacion
   
 ``````
 
